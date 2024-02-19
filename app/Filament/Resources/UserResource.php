@@ -14,6 +14,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -89,7 +91,39 @@ class UserResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('city')
+                    ->options([
+                        'Jakarta' => 'Jakarta',
+                        'Bandung' => 'Bandung',
+                        'Surabaya' => 'Surabaya',
+                        'Yogyakarta' => 'Yogyakarta',
+                        'Bali' => 'Bali',
+                    ])
+                    ->label('City')
+                    ->preload(),
+                SelectFilter::make('gender')
+                    ->options([
+                        'Male' => 'Male',
+                        'Female' => 'Female'
+                    ])
+                    ->label('Gender')
+                    ->preload(),
+                Filter::make('date_of_birth')
+                    ->form([
+                        DatePicker::make('date_of_birth_from'),
+                        DatePicker::make('date_of_birth_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['date_of_birth_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_of_birth', '>=', $date),
+                            )
+                            ->when(
+                                $data['date_of_birth_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('date_of_birth', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
