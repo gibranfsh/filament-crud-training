@@ -8,6 +8,9 @@ use App\Filament\Clusters\ClientProject\Resources\ProjectResource\RelationManage
 use App\Models\Project;
 use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,7 +31,35 @@ class ProjectResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('title')
+                    ->label('Title')
+                    ->required()
+                    ->placeholder('Project Title'),
+                TextInput::make('description')
+                    ->label('Description')
+                    ->required()
+                    ->placeholder('Project Description'),
+                Select::make('platform')->options([
+                    'Website' => 'Website',
+                    'Mobile' => 'Mobile',
+                    'Desktop' => 'Desktop',
+                ])
+                    ->required(),
+                Select::make('status')->options([
+                    'ON_PROGRESS' => 'On Progress',
+                    'FINISHED' => 'Finished',
+                    'ON_HOLD' => 'On Hold',
+                    'CANCELLED' => 'Cancelled',
+                ])
+                    ->required(),
+                DatePicker::make('start_date')
+                    ->label('Start Date')
+                    ->minDate(now())
+                    ->required(),
+                DatePicker::make('end_date')
+                    ->label('End Date')
+                    ->minDate(now())
+                    ->required(),
             ]);
     }
 
