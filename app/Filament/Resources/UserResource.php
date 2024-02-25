@@ -127,6 +127,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -151,6 +152,7 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'custompageuser' => Pages\CustomPageUser::route('/custompage'),
             'custompageuser2' => Pages\CustomPageUser2::route('/custompage2'),
+            'sort' => Pages\SortUsers::route('/sort'),
         ];
     }
 }
